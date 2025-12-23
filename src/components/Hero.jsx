@@ -16,6 +16,32 @@ const Hero = () => {
 
   useGSAP(() => {
     let cancelled = false;
+    const video = videoRef.current;
+
+    video.muted = true;
+    video.playsInline = true;
+
+    video.addEventListener("loadeddata", () => {
+      video.currentTime = 0.01;
+    });
+
+    const setupVideoScroll = () => {
+      const duration = video.duration;
+
+      gsap.to(video, {
+        currentTime: duration,
+        ease: "none",
+        scrollTrigger: {
+          trigger: video,
+          start: startValue,
+          end: endValue,
+          scrub: true,
+          pin: true,
+        }
+      });
+    };
+
+video.addEventListener("loadeddata", setupVideoScroll, { once: true });
 
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
